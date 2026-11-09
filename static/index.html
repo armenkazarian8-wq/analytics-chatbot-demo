@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analytics Chatbot Demo (Fictional Data)</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --border: #2d3a4f;
+      --text: #e7ecf3;
+      --muted: #9aa8bc;
+      --accent: #5b9cff;
+      --user: #243247;
+      --bot: #1e2a3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
+      background: var(--panel); display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
+    }
+    header h1 { font-size: 1.05rem; margin: 0; font-weight: 600; }
+    header .badge {
+      font-size: 0.75rem; color: #f6c177; border: 1px solid #6b5428;
+      background: #2a2110; padding: 0.15rem 0.5rem; border-radius: 999px;
+    }
+    .controls { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-left: auto; }
+    select, button, input[type="text"] {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.5rem 0.75rem; font: inherit;
+    }
+    button { background: var(--accent); border-color: transparent; color: #041018; font-weight: 600; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    main { flex: 1; display: flex; flex-direction: column; max-width: 880px; width: 100%; margin: 0 auto; padding: 1rem; }
+    #log {
+      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;
+      padding: 0.5rem 0 1rem;
+    }
+    .msg { padding: 0.85rem 1rem; border-radius: 12px; max-width: 90%; line-height: 1.45; white-space: pre-wrap; }
+    .msg.user { align-self: flex-end; background: var(--user); border: 1px solid var(--border); }
+    .msg.assistant { align-self: flex-start; background: var(--bot); border: 1px solid var(--border); }
+    .msg .meta { display: block; font-size: 0.72rem; color: var(--muted); margin-bottom: 0.35rem; }
+    form {
+      display: flex; gap: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border);
+    }
+    form input { flex: 1; }
+    .hint { color: var(--muted); font-size: 0.85rem; margin: 0 0 0.75rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Analytics Chatbot Demo</h1>
+    <span class="badge">FICTIONAL DATA · DEMO ONLY</span>
+    <div class="controls">
+      <label>
+        Customer
+        <select id="customer"></select>
+      </label>
+      <label>
+        Session
+        <input id="session" type="text" value="demo-session-1" size="16" />
+      </label>
+    </div>
+  </header>
+  <main>
+    <p class="hint">
+      Ask questions like “Which posts drove the most engagement last month?”
+      Answers are scoped to the selected fictional customer only.
+    </p>
+    <div id="log"></div>
+    <form id="chat-form">
+      <input id="message" type="text" placeholder="Ask about this customer's posts…" autocomplete="off" required />
+      <button type="submit" id="send">Send</button>
+    </form>
+  </main>
+  <script>
+    // Minimal React-like UI without a build step (plain JS).
+    const logEl = document.getElementById('log');
+    const customerEl = document.getElementById('customer');
+    const sessionEl = document.getElementById('session');
+    const messageEl = document.getElementById('message');
+    const formEl = document.getElementById('chat-form');
+    const sendBtn = document.getElementById('send');
+
+    function addMessage(role, text, meta) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + role;
+      if (meta) {
+        const m = document.createElement('span');
+        m.className = 'meta';
+        m.textContent = meta;
+        div.appendChild(m);
+      }
+      div.appendChild(document.createTextNode(text));
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    async function loadCustomers() {
+      const res = await fetch('/customers');
+      const data = await res.json();
+      customerEl.innerHTML = '';
+      data.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        customerEl.appendChild(opt);
+      });
+    }
+
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = messageEl.value.trim();
+      if (!message) return;
+      addMessage('user', message);
+      messageEl.value = '';
+      sendBtn.disabled = true;
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer_id: customerEl.value,
+            session_id: sessionEl.value || 'demo-session-1',
+            message
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Request failed');
+        addMessage('assistant', data.answer, `${data.query_kind} · ${data.mode}`);
+      } catch (err) {
+        addMessage('assistant', 'Error: ' + err.message, 'error');
+      } finally {
+        sendBtn.disabled = false;
+        messageEl.focus();
+      }
+    });
+
+    loadCustomers();
+  </script>
+</body>
+</html>
