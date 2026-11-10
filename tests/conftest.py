@@ -12,8 +12,10 @@ TEST_DB = Path("/tmp/analytics_chatbot_demo_test.db")
 if TEST_DB.exists():
     TEST_DB.unlink()
 os.environ["DATABASE_URL"] = f"sqlite:///{TEST_DB}"
+# Force deterministic fallback so tests do not call external LLMs.
 os.environ.pop("OPENAI_API_KEY", None)
 os.environ.pop("LLM_API_KEY", None)
+os.environ.pop("GEMINI_API_KEY", None)
 
 from app.db import Base, SessionLocal, engine  # noqa: E402
 from app.seed import seed  # noqa: E402

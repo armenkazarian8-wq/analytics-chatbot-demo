@@ -16,7 +16,7 @@ Stack:
 - **PostgreSQL + pgvector** — intended production path via `docker-compose.yml`
 - **SQLite + in-memory-style vectors** — default local path (no Docker required)
 - **Minimal chat UI** — single HTML page served by FastAPI (no build step)
-- **Optional LLM** — if `OPENAI_API_KEY` is set; otherwise a deterministic fallback composes answers from SQL/retrieval results
+- **Optional LLM** — Google Gemini (`GEMINI_API_KEY`) or OpenAI (`OPENAI_API_KEY`); otherwise a deterministic fallback composes answers from SQL/retrieval results. The model only sees that customer's structured query rows.
 
 ## Quick start (local, no Docker)
 
@@ -60,10 +60,19 @@ The portable SQLite path stores embedding vectors as JSON on `post_embeddings`. 
 
 ## Optional: LLM answers
 
+The LLM **only phrases** answers from the tenant-scoped structured query result (SQL / retrieval rows for that `customer_id`). It never receives other customers' data.
+
 ```bash
+# Google Gemini (preferred when set)
+export GEMINI_API_KEY=...          # from Google AI Studio
+export LLM_MODEL=gemini-3.5-flash-lite  # optional; default gemini-3.5-flash-lite
+
+# Or OpenAI
 export OPENAI_API_KEY=sk-...
-export LLM_MODEL=gpt-4o-mini   # optional
+export LLM_MODEL=gpt-4o-mini       # optional
 ```
+
+Provider selection: if `GEMINI_API_KEY` is set → Gemini; else if `OPENAI_API_KEY` is set → OpenAI; else deterministic fallback. Do not commit `.env` (it is gitignored).
 
 Without a key, answers are built directly from structured query results (deterministic demo mode).
 

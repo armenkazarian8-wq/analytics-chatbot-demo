@@ -1,6 +1,8 @@
 # Demo transcript (screenshot-free)
 
-Generated locally against **fictional** seeded data. Answer mode: **deterministic fallback**.
+Generated locally against **fictional** seeded data. Answer mode: **Google Gemini (`gemini-3.5-flash-lite`)**.
+
+LLM answers (when enabled) are phrased only from tenant-scoped structured query results — the model never sees other customers' rows.
 
 This is an illustration of the chatbot, not a client deliverable.
 
@@ -8,16 +10,16 @@ This is an illustration of the chatbot, not a client deliverable.
 
 ### Q1. Which posts drove the most engagement last month?
 
-**Query kind:** `top_engagement` · **Mode:** `fallback`
+**Query kind:** `top_engagement` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Aurora Trail Co. (FICTIONAL) only. Query type: top_engagement.
+Based on Aurora Trail Co.'s data (`cust_aurora`), the top-performing post for engagement last month was the TikTok video **"Packing a 3-day backpack in 60 seconds"**, which drove **6,920 total engagement** (5,400 likes, 620 comments, and 900 shares). 
 
-Top engagement in the last 30 days: 'Packing a 3-day backpack in 60 seconds' on tiktok (6920 engagement: 5400 likes, 620 comments, 900 shares). Next: #2 'Wrong way vs right way to lace hiking boots' (4310), #3 'Customer photo: summit coffee ritual' (1805).
-
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+The next highest posts were:
+2. **"Wrong way vs right way to lace hiking boots"** on TikTok with **4,310 engagement** (3,200 likes, 410 comments, 700 shares).
+3. **"Customer photo: summit coffee ritual"** on Instagram with **1,805 engagement** (1,500 likes, 210 comments, 95 shares).
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -64,16 +66,12 @@ Top engagement in the last 30 days: 'Packing a 3-day backpack in 60 seconds' on 
 
 ### Q2. What are the total engagement totals last month?
 
-**Query kind:** `totals` · **Mode:** `fallback`
+**Query kind:** `totals` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Aurora Trail Co. (FICTIONAL) only (continuing from earlier: “Which posts drove the most engagement last month?”). Query type: totals.
-
-In the last 30 days this customer published 6 posts with 15610 total engagement (12180 likes, 1545 comments, 1885 shares) and 224000 combined reach.
-
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+Based on Aurora Trail Co.'s data (`cust_aurora`), the total engagement across all posts published over the last 30 days is **15,610**. This includes **12,180 likes**, **1,545 comments**, and **1,885 shares** generated from a total of 6 posts, achieving a combined reach of 224,000.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -95,16 +93,16 @@ In the last 30 days this customer published 6 posts with 15610 total engagement 
 
 ### Q3. Show platform breakdown for the last 30 days
 
-**Query kind:** `by_platform` · **Mode:** `fallback`
+**Query kind:** `by_platform` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Aurora Trail Co. (FICTIONAL) only (continuing from earlier: “What are the total engagement totals last month?”). Query type: by_platform.
+Based on Aurora Trail Co.'s data (`cust_aurora`), the platform breakdown for the last 30 days is:
 
-Platform breakdown (last 30 days): tiktok: 11230 engagement across 2 posts; instagram: 3825 engagement across 3 posts; twitter: 555 engagement across 1 posts.
-
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+* **TikTok:** 11,230 engagements across 2 posts
+* **Instagram:** 3,825 engagements across 3 posts
+* **Twitter:** 555 engagements across 1 post
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -135,16 +133,21 @@ Platform breakdown (last 30 days): tiktok: 11230 engagement across 2 posts; inst
 
 ### Q1. Which posts drove the most engagement last month?
 
-**Query kind:** `top_engagement` · **Mode:** `fallback`
+**Query kind:** `top_engagement` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Nimbus Bean Roasters (FICTIONAL) only. Query type: top_engagement.
+Based on Nimbus Bean Roasters' (`cust_nimbus`) data for the last 30 days, the top posts by engagement are:
 
-Top engagement in the last 30 days: 'Cold brew concentrate how-to' on tiktok (5500 engagement: 4100 likes, 520 comments, 880 shares). Next: #2 'Limited winter blend launch' (2300), #3 'Subscription box unboxing' (895).
+1. **"Cold brew concentrate how-to"** (TikTok, Nov 1) – 5,500 total engagement (4,100 likes, 520 comments, 880 shares).
+2. **"Limited winter blend launch"** (Instagram, Nov 4) – 2,300 total engagement (1,900 likes, 260 comments, 140 shares).
+3. **"Subscription box unboxing"** (Instagram, Oct 15) – 895 total engagement (760 likes, 95 comments, 40 shares).
+4. **"Meet the farmers — fictional co-op story"** (Instagram, Oct 28) – 635 engagement.
+5. **"Cafe playlist for deep work"** (Instagram, Nov 7) – 485 engagement. 
 
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+All figures come directly from
+ this customer's data.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -191,16 +194,21 @@ Top engagement in the last 30 days: 'Cold brew concentrate how-to' on tiktok (55
 
 ### Q2. What are the total engagement totals last month?
 
-**Query kind:** `totals` · **Mode:** `fallback`
+**Query kind:** `totals` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Nimbus Bean Roasters (FICTIONAL) only (continuing from earlier: “Which posts drove the most engagement last month?”). Query type: totals.
+Based on Nimbus Bean Roasters' (`cust_nimbus`) data for the last 30 days, here are the total engagement metrics:
 
-In the last 30 days this customer published 6 posts with 10263 total engagement (8040 likes, 1033 comments, 1190 shares) and 150500 combined reach.
+* **Total Engagement:** 10,263
+* **Likes:** 8,040
+* **Comments:** 1,033
+* **Shares:** 1,190
+* **Combined Reach:** 150,500
+* **Total Posts Published:** 6
 
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+All figures come directly from this customer's data.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -222,16 +230,18 @@ In the last 30 days this customer published 6 posts with 10263 total engagement 
 
 ### Q3. Show platform breakdown for the last 30 days
 
-**Query kind:** `by_platform` · **Mode:** `fallback`
+**Query kind:** `by_platform` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Nimbus Bean Roasters (FICTIONAL) only (continuing from earlier: “What are the total engagement totals last month?”). Query type: by_platform.
+Based on Nimbus Bean Roasters' (`cust_nimbus`) data for the last 30 days, the platform breakdown is as follows:
 
-Platform breakdown (last 30 days): tiktok: 5500 engagement across 1 posts; instagram: 4315 engagement across 4 posts; twitter: 448 engagement across 1 posts.
+* **TikTok:** 5,500 total engagement across 1 post.
+* **Instagram:** 4,315 total engagement across 4 posts.
+* **Twitter:** 448 total engagement across 1 post.
 
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+All figures come directly from this customer's data.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -262,16 +272,20 @@ Platform breakdown (last 30 days): tiktok: 5500 engagement across 1 posts; insta
 
 ### Q1. Which posts drove the most engagement last month?
 
-**Query kind:** `top_engagement` · **Mode:** `fallback`
+**Query kind:** `top_engagement` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Pixel Pine Studio (FICTIONAL) only. Query type: top_engagement.
+Based on Pixel Pine Studio's (`cust_pixelpine`) data for the last 30 days, the top posts driving engagement are:
 
-Top engagement in the last 30 days: 'Before/after logo animation' on tiktok (4690 engagement: 3600 likes, 440 comments, 650 shares). Next: #2 'Motion design process reel' (2930), #3 'Client kickoff checklist template' (1890).
+1. **"Before/after logo animation"** (TikTok) — 4,690 total engagement (3,600 likes, 440 comments, 650 shares).
+2. **"Motion design process reel"** (Instagram) — 2,930 engagement (2,400 likes, 310 comments, 220 shares).
+3. **"Client kickoff checklist template"** (LinkedIn) — 1,890 engagement (1,500 likes, 210 comments, 180 shares).
+4. **"Color systems that scale"** (Instagram) — 1,320 engagement.
+5. **"How we run weekly creative critiques"** (LinkedIn) — 1,170 engagement. 
 
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+These figures are pulled directly from Pixel Pine Studio's performance records.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -318,16 +332,20 @@ Top engagement in the last 30 days: 'Before/after logo animation' on tiktok (469
 
 ### Q2. What are the total engagement totals last month?
 
-**Query kind:** `totals` · **Mode:** `fallback`
+**Query kind:** `totals` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Pixel Pine Studio (FICTIONAL) only (continuing from earlier: “Which posts drove the most engagement last month?”). Query type: totals.
+Based on Pixel Pine Studio's (`cust_pixelpine`) data for the last 30 days, the total engagement figures are:
 
-In the last 30 days this customer published 7 posts with 12935 total engagement (10300 likes, 1345 comments, 1290 shares) and 195000 combined reach.
+* **Total Engagement:** 12,935 across 7 published posts
+* **Likes:** 10,300
+* **Comments:** 1,345
+* **Shares:** 1,290
+* **Combined Reach:** 195,000
 
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+These figures come directly from this customer's data.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
@@ -349,16 +367,19 @@ In the last 30 days this customer published 7 posts with 12935 total engagement 
 
 ### Q3. Show platform breakdown for the last 30 days
 
-**Query kind:** `by_platform` · **Mode:** `fallback`
+**Query kind:** `by_platform` · **Mode:** `llm` · **Provider:** `gemini`
 
 **Answer:**
 
 ```
-Answer for Pixel Pine Studio (FICTIONAL) only (continuing from earlier: “What are the total engagement totals last month?”). Query type: by_platform.
+Based on Pixel Pine Studio's (`cust_pixelpine`) data for the last 30 days, here is the platform breakdown by total engagement:
 
-Platform breakdown (last 30 days): instagram: 4830 engagement across 3 posts; tiktok: 4690 engagement across 1 posts; linkedin: 3060 engagement across 2 posts; twitter: 355 engagement across 1 posts.
+* **Instagram:** 4,830 engagement (3 posts)
+* **TikTok:** 4,690 engagement (1 post)
+* **LinkedIn:** 3,060 engagement (2 posts)
+* **Twitter:** 355 engagement (1 post)
 
-(Demo mode: deterministic answer from this customer's data. No other tenants were queried.)
+These figures come directly from this customer's data.
 ```
 
 <details><summary>Structured rows (truncated)</summary>
